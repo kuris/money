@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>투자 수익률 계산기 - 주식·코인 순수익 & 손익분기점 | 돈공부 도구</title>
+  <meta name="description" content="매수가, 매도가, 수량, 거래 수수료, 증권거래세, 배당금을 모두 반영하여 실질 투자 순수익금과 수익률, 본전 손익분기점 가격을 계산합니다.">
+  <meta name="keywords" content="투자수익률 계산기, 주식 수익률 계산기, 코인 수익률, 손익분기점 계산기, 증권거래세, 매매수수료 계산">
+  <link rel="canonical" href="https://money.chatgpts.kr/return">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="돈공부 도구">
+  <meta property="og:title" content="투자 수익률 계산기 - 순수익 & 손익분기점">
+  <meta property="og:description" content="수수료와 거래세를 반영한 실질 순수익과 손해보지 않는 매도가격을 계산해보세요.">
+  <meta property="og:url" content="https://money.chatgpts.kr/return">
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Ctext%20y%3D%22.9em%22%20font-size%3D%2290%22%3E%F0%9F%92%B9%3C%2Ftext%3E%3C%2Fsvg%3E">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3321070604000141" crossorigin="anonymous"></script>
+  <!-- Vercel Analytics -->
+  <script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
+  <script defer src="/_vercel/insights/script.js"></script>
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="navbar-container">
+      <a href="/" class="brand-logo">
+        <span class="logo-icon">💰</span>
+        <span class="logo-title">돈공부 도구</span>
+      </a>
+
+      <nav class="nav-links">
+        <a href="/" class="nav-link">홈</a>
+        <a href="/deposit" class="nav-link">예금</a>
+        <a href="/savings" class="nav-link">적금</a>
+        <a href="/compound" class="nav-link">복리</a>
+        <a href="/loan" class="nav-link">대출이자</a>
+        <a href="/return" class="nav-link active">투자수익률</a>
+        <a href="/terms" class="nav-link">금융용어</a>
+      </nav>
+
+      <div class="nav-actions">
+        <div class="family-dropdown">
+          <button id="family-toggle-btn" class="family-btn" aria-haspopup="true" aria-expanded="false">
+            <span>패밀리 서비스</span>
+            <i class="fa-solid fa-chevron-down"></i>
+          </button>
+          <div id="family-dropdown-menu" class="family-menu">
+            <div class="family-menu-header">놀자 & 도구 시리즈</div>
+            <a href="https://voca.chatgpts.kr" target="_blank" rel="noopener" class="family-item"><span class="fi-icon">📖</span><div><strong>낱말놀자</strong><p>단어 퀴즈</p></div></a>
+            <a href="https://hanja.chatgpts.kr" target="_blank" rel="noopener" class="family-item"><span class="fi-icon">🏮</span><div><strong>한자놀자</strong><p>급수 한자</p></div></a>
+            <a href="https://history.chatgpts.kr" target="_blank" rel="noopener" class="family-item"><span class="fi-icon">🏛️</span><div><strong>역사야놀자</strong><p>역사 퀴즈</p></div></a>
+            <a href="https://fortune.chatgpts.kr" target="_blank" rel="noopener" class="family-item"><span class="fi-icon">🔮</span><div><strong>운세놀자</strong><p>타로·운세</p></div></a>
+            <a href="https://mind.chatgpts.kr" target="_blank" rel="noopener" class="family-item"><span class="fi-icon">🧠</span><div><strong>심리테스트</strong><p>성격 검사</p></div></a>
+            <a href="https://work.chatgpts.kr" target="_blank" rel="noopener" class="family-item"><span class="fi-icon">💼</span><div><strong>직장인 업무도구</strong><p>연봉 계산기</p></div></a>
+            <a href="https://money.chatgpts.kr" class="family-item active"><span class="fi-icon">💰</span><div><strong>돈공부 도구 (현재)</strong><p>금융 계산기</p></div></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="page-container">
+    <div class="calc-header">
+      <div class="calc-badge"><i class="fa-solid fa-coins"></i> 주식·코인 손익</div>
+      <h1 class="calc-title">투자 수익률 & 손익분기 계산기</h1>
+      <p class="calc-subtitle">매매 수수료와 증권거래세, 배당금을 모두 공제한 실질 순손익과 본전 매도가격을 계산합니다.</p>
+    </div>
+
+    <div class="calc-layout">
+      <!-- 폼 -->
+      <div class="calc-card form-card">
+        <!-- 종목 프리셋 탭 -->
+        <div class="preset-tag-tabs">
+          <button type="button" class="preset-tag-btn active" id="preset-kr-stock">국내 주식</button>
+          <button type="button" class="preset-tag-btn" id="preset-us-stock">해외(미국) 주식</button>
+          <button type="button" class="preset-tag-btn" id="preset-crypto">가상자산(코인)</button>
+        </div>
+
+        <form id="return-form">
+          <!-- 매수 단가 -->
+          <div class="form-group">
+            <label for="input-buy-price" class="form-label">
+              1주당 매수가격
+              <span class="currency-hint" id="buy-price-hint"></span>
+            </label>
+            <div class="input-with-unit">
+              <input type="text" id="input-buy-price" class="form-input" placeholder="예: 70,000" value="70,000" inputmode="numeric">
+              <span class="input-unit">원</span>
+            </div>
+          </div>
+
+          <!-- 매수 수량 -->
+          <div class="form-group">
+            <label for="input-quantity" class="form-label">매수 수량</label>
+            <div class="input-with-unit">
+              <input type="number" id="input-quantity" class="form-input" min="1" max="1000000" value="100">
+              <span class="input-unit">주</span>
+            </div>
+            <div class="quick-btn-group">
+              <button type="button" class="quick-btn" data-qty="10">+10주</button>
+              <button type="button" class="quick-btn" data-qty="50">+50주</button>
+              <button type="button" class="quick-btn" data-qty="100">+100주</button>
+              <button type="button" class="quick-btn" data-qty="500">+500주</button>
+            </div>
+          </div>
+
+          <!-- 매도 단가 -->
+          <div class="form-group">
+            <label for="input-sell-price" class="form-label">
+              1주당 매도가격 (목표가)
+              <span class="currency-hint" id="sell-price-hint"></span>
+            </label>
+            <div class="input-with-unit">
+              <input type="text" id="input-sell-price" class="form-input" placeholder="예: 85,000" value="85,000" inputmode="numeric">
+              <span class="input-unit">원</span>
+            </div>
+          </div>
+
+          <!-- 수수료 & 세금 옵션 -->
+          <div class="form-row-2">
+            <div class="form-group">
+              <label for="input-fee-rate" class="form-label">매수/매도 수수료율 (%)</label>
+              <div class="input-with-unit">
+                <input type="number" id="input-fee-rate" class="form-input" step="0.001" min="0" max="5" value="0.015">
+                <span class="input-unit">%</span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="input-tax-rate" class="form-label">매도 거래세율 (%)</label>
+              <div class="input-with-unit">
+                <input type="number" id="input-tax-rate" class="form-input" step="0.01" min="0" max="5" value="0.18">
+                <span class="input-unit">%</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 배당금 (선택) -->
+          <div class="form-group">
+            <label for="input-dividend" class="form-label">수령 배당금 총액 (선택)</label>
+            <div class="input-with-unit">
+              <input type="text" id="input-dividend" class="form-input" placeholder="0" value="0" inputmode="numeric">
+              <span class="input-unit">원</span>
+            </div>
+          </div>
+
+          <div class="btn-action-group">
+            <button type="submit" class="btn btn-primary"><i class="fa-solid fa-calculator"></i> 수익률 계산하기</button>
+            <button type="button" id="btn-share-page" class="btn btn-secondary"><i class="fa-regular fa-share-from-square"></i> 링크 공유</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- 결과 카드 -->
+      <div class="calc-card result-card">
+        <div class="result-header">
+          <span class="result-label">실질 순손익 (세후)</span>
+          <div class="result-total-amount text-success" id="res-net-profit">+1,481,770원</div>
+          <div class="result-sub-korean" id="res-return-percent">수익률: +21.17%</div>
+        </div>
+
+        <div class="result-stats-grid">
+          <div class="stat-box">
+            <span class="stat-title">총 매수 금액 (비용포함)</span>
+            <strong class="stat-value" id="res-total-buy">7,001,050원</strong>
+          </div>
+          <div class="stat-box">
+            <span class="stat-title">실 매도 수령액</span>
+            <strong class="stat-value" id="res-net-sell">8,482,820원</strong>
+          </div>
+          <div class="stat-box">
+            <span class="stat-title">총 수수료 및 거래세</span>
+            <strong class="stat-value text-danger" id="res-total-fees">-17,180원</strong>
+          </div>
+          <div class="stat-box">
+            <span class="stat-title">손익분기 매도가격 (본전)</span>
+            <strong class="stat-value text-accent" id="res-breakeven">70,148원</strong>
+          </div>
+        </div>
+
+        <div class="info-callout">
+          <i class="fa-solid fa-scale-balanced"></i>
+          <div>
+            <strong>손익분기점(본전 매도가) 해설</strong>
+            <p>매수 수수료, 매도 수수료, 증권거래세를 모두 감안했을 때 최소 <strong id="breakeven-explain">70,148원</strong> 이상으로 매도해야 손실이 나지 않습니다.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 패밀리 배너 -->
+    <section class="nolja-family-banner">
+      <div class="nfb-header">
+        <span class="nfb-badge">FAMILY SERVICES</span>
+        <h3 class="nfb-title">놀자 & 도구 패밀리 서비스</h3>
+      </div>
+      <div class="nfb-grid">
+        <a href="https://work.chatgpts.kr" target="_blank" rel="noopener" class="nfb-card"><span class="nfb-icon">💼</span><div class="nfb-info"><span class="nfb-name">직장인 업무도구</span><span class="nfb-sub">연봉·퇴직금</span></div></a>
+        <a href="https://history.chatgpts.kr" target="_blank" rel="noopener" class="nfb-card"><span class="nfb-icon">🏛️</span><div class="nfb-info"><span class="nfb-name">역사야놀자</span><span class="nfb-sub">역사 퀴즈</span></div></a>
+        <a href="https://fortune.chatgpts.kr" target="_blank" rel="noopener" class="nfb-card"><span class="nfb-icon">🔮</span><div class="nfb-info"><span class="nfb-name">운세놀자</span><span class="nfb-sub">타로·운세</span></div></a>
+        <a href="https://mind.chatgpts.kr" target="_blank" rel="noopener" class="nfb-card"><span class="nfb-icon">🧠</span><div class="nfb-info"><span class="nfb-name">심리테스트</span><span class="nfb-sub">성격 유형</span></div></a>
+      </div>
+    </section>
+
+    <!-- 면책 조항 -->
+    <div class="disclaimer-card">
+      <i class="fa-solid fa-triangle-exclamation"></i>
+      <div>
+        <strong>면책 고지</strong>
+        <p>본 계산 결과는 사용자가 입력한 수수료율 및 거래세율을 기준으로 산출된 참고 수치입니다. 증권사별 유관기관 제비용, 해외주식 양도소득세(연 250만원 공제 후 22%), 환율 변동 등은 별도로 확인하시기 바랍니다.</p>
+      </div>
+    </div>
+
+    <!-- 광고 슬롯 -->
+    <div class="ad-slot">
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-3321070604000141"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+      <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-container">
+      <div class="footer-col">
+        <div class="footer-logo">💰 돈공부 도구</div>
+        <p class="footer-copy">스마트한 자산 형성을 돕는 무료 생활 금융 플랫폼</p>
+      </div>
+      <div class="footer-col">
+        <h4>도구 바로가기</h4>
+        <ul class="footer-links">
+          <li><a href="/deposit">정기예금 계산기</a></li>
+          <li><a href="/savings">정기적금 계산기</a></li>
+          <li><a href="/compound">복리 계산기</a></li>
+          <li><a href="/loan">대출이자 계산기</a></li>
+          <li><a href="/return">투자수익률 계산기</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>패밀리 서비스</h4>
+        <ul class="footer-links">
+          <li><a href="https://work.chatgpts.kr" target="_blank" rel="noopener">직장인 업무도구</a></li>
+          <li><a href="https://fortune.chatgpts.kr" target="_blank" rel="noopener">운세놀자</a></li>
+          <li><a href="https://history.chatgpts.kr" target="_blank" rel="noopener">역사야놀자</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 돈공부 도구. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="js/common.js"></script>
+  <script src="js/calculators.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const buyPriceInput = document.getElementById('input-buy-price');
+      const buyPriceHint = document.getElementById('buy-price-hint');
+      const qtyInput = document.getElementById('input-quantity');
+      const sellPriceInput = document.getElementById('input-sell-price');
+      const sellPriceHint = document.getElementById('sell-price-hint');
+      const feeRateInput = document.getElementById('input-fee-rate');
+      const taxRateInput = document.getElementById('input-tax-rate');
+      const divInput = document.getElementById('input-dividend');
+      const form = document.getElementById('return-form');
+
+      attachNumberInputFormatter(buyPriceInput, buyPriceHint);
+      attachNumberInputFormatter(sellPriceInput, sellPriceHint);
+      attachNumberInputFormatter(divInput);
+
+      // 프리셋 탭
+      document.getElementById('preset-kr-stock').addEventListener('click', function() {
+        setPresetActive(this);
+        feeRateInput.value = '0.015';
+        taxRateInput.value = '0.18';
+        doCalculate();
+      });
+      document.getElementById('preset-us-stock').addEventListener('click', function() {
+        setPresetActive(this);
+        feeRateInput.value = '0.07';
+        taxRateInput.value = '0.00';
+        doCalculate();
+      });
+      document.getElementById('preset-crypto').addEventListener('click', function() {
+        setPresetActive(this);
+        feeRateInput.value = '0.05';
+        taxRateInput.value = '0.00';
+        doCalculate();
+      });
+
+      function setPresetActive(btn) {
+        document.querySelectorAll('.preset-tag-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      }
+
+      // 수량 증감 버튼
+      document.querySelectorAll('[data-qty]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const val = (parseInt(qtyInput.value, 10) || 0) + parseInt(btn.dataset.qty, 10);
+          qtyInput.value = val;
+          doCalculate();
+        });
+      });
+
+      function doCalculate() {
+        const buyPrice = parseNumber(buyPriceInput.value);
+        const buyQuantity = parseInt(qtyInput.value, 10) || 1;
+        const sellPrice = parseNumber(sellPriceInput.value);
+        const feeRate = parseFloat(feeRateInput.value) || 0;
+        const taxRate = parseFloat(taxRateInput.value) || 0;
+        const dividend = parseNumber(divInput.value);
+
+        const res = calculateInvestmentReturn({
+          buyPrice,
+          buyQuantity,
+          sellPrice,
+          feeRateBuyPercent: feeRate,
+          feeRateSellPercent: feeRate,
+          taxRateSellPercent: taxRate,
+          dividendAmount: dividend
+        });
+
+        const profitEl = document.getElementById('res-net-profit');
+        const isProfit = res.netProfit >= 0;
+        profitEl.textContent = `${isProfit ? '+' : ''}${formatNumber(res.netProfit)}원`;
+        profitEl.className = `result-total-amount ${isProfit ? 'text-success' : 'text-danger'}`;
+
+        const rateEl = document.getElementById('res-return-percent');
+        rateEl.textContent = `수익률: ${isProfit ? '+' : ''}${res.returnRatePercent.toFixed(2)}%`;
+
+        document.getElementById('res-total-buy').textContent = `${formatNumber(res.totalBuyCost)}원`;
+        document.getElementById('res-net-sell').textContent = `${formatNumber(res.netSellProceeds)}원`;
+        const totalFees = res.buyFee + res.sellFee + res.sellTax;
+        document.getElementById('res-total-fees').textContent = `-${formatNumber(totalFees)}원 (수수료 ${formatNumber(res.buyFee + res.sellFee)}원 + 세금 ${formatNumber(res.sellTax)}원)`;
+        document.getElementById('res-breakeven').textContent = `${formatNumber(res.breakEvenPrice)}원`;
+        document.getElementById('breakeven-explain').textContent = `${formatNumber(res.breakEvenPrice)}원`;
+      }
+
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        doCalculate();
+      });
+
+      qtyInput.addEventListener('input', doCalculate);
+      feeRateInput.addEventListener('input', doCalculate);
+      taxRateInput.addEventListener('input', doCalculate);
+      divInput.addEventListener('input', doCalculate);
+
+      doCalculate();
+    });
+  </script>
+  <script src="js/track.js" data-service="money"></script>
+</body>
+</html>

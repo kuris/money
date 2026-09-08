@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>복리 계산기 - 스노우볼 자산 성장 시뮬레이션 | 돈공부 도구</title>
+  <meta name="description" content="초기 투자금과 매월 적립금, 목표 수익률에 따라 자산이 불어나는 복리 효과(스노우볼)를 연도별 테이블과 72의 법칙으로 시뮬레이션합니다.">
+  <meta name="keywords" content="복리 계산기, 스노우볼 효과, 72의 법칙, 장기투자 계산기, 적립식 복리, 복리 시뮬레이션">
+  <link rel="canonical" href="https://money.chatgpts.kr/compound">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="돈공부 도구">
+  <meta property="og:title" content="복리 계산기 - 스노우볼 자산 시뮬레이션">
+  <meta property="og:description" content="시간이 지날수록 눈덩이처럼 불어나는 복리 효과를 연도별로 확인해보세요.">
+  <meta property="og:url" content="https://money.chatgpts.kr/compound">
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Ctext%20y%3D%22.9em%22%20font-size%3D%2290%22%3E%F0%9F%93%88%3C%2Ftext%3E%3C%2Fsvg%3E">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3321070604000141" crossorigin="anonymous"></script>
+  <!-- Vercel Analytics -->
+  <script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
+  <script defer src="/_vercel/insights/script.js"></script>
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="navbar-container">
+      <a href="/" class="brand-logo">
+        <span class="logo-icon">💰</span>
+        <span class="logo-title">돈공부 도구</span>
+      </a>
+
+      <nav class="nav-links">
+        <a href="/" class="nav-link">홈</a>
+        <a href="/deposit" class="nav-link">예금</a>
+        <a href="/savings" class="nav-link">적금</a>
+        <a href="/compound" class="nav-link active">복리</a>
+        <a href="/loan" class="nav-link">대출이자</a>
+        <a href="/return" class="nav-link">투자수익률</a>
+        <a href="/terms" class="nav-link">금융용어</a>
+      </nav>
+
+      <div class="nav-actions">
+        <div class="family-dropdown">
+          <button id="family-toggle-btn" class="family-btn" aria-haspopup="true" aria-expanded="false">
+            <span>패밀리 서비스</span>
+            <i class="fa-solid fa-chevron-down"></i>
+          </button>
+          <div id="family-dropdown-menu" class="family-menu">
+            <div class="family-menu-header">놀자 & 도구 시리즈</div>
+            <a href="https://voca.chatgpts.kr" target="_blank" rel="noopener" class="family-item"><span class="fi-icon">📖</span><div><strong>낱말놀자</strong><p>단어 퀴즈</p></div></a>
+            <a href="https://hanja.chatgpts.kr" target="_blank" rel="noopener" class="family-item"><span class="fi-icon">🏮</span><div><strong>한자놀자</strong><p>급수 한자</p></div></a>
+            <a href="https://history.chatgpts.kr" target="_blank" rel="noopener" class="family-item"><span class="fi-icon">🏛️</span><div><strong>역사야놀자</strong><p>역사 퀴즈</p></div></a>
+            <a href="https://fortune.chatgpts.kr" target="_blank" rel="noopener" class="family-item"><span class="fi-icon">🔮</span><div><strong>운세놀자</strong><p>타로·운세</p></div></a>
+            <a href="https://mind.chatgpts.kr" target="_blank" rel="noopener" class="family-item"><span class="fi-icon">🧠</span><div><strong>심리테스트</strong><p>성격 검사</p></div></a>
+            <a href="https://work.chatgpts.kr" target="_blank" rel="noopener" class="family-item"><span class="fi-icon">💼</span><div><strong>직장인 업무도구</strong><p>연봉 계산기</p></div></a>
+            <a href="https://money.chatgpts.kr" class="family-item active"><span class="fi-icon">💰</span><div><strong>돈공부 도구 (현재)</strong><p>금융 계산기</p></div></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="page-container">
+    <div class="calc-header">
+      <div class="calc-badge"><i class="fa-solid fa-chart-line"></i> 스노우볼 효과</div>
+      <h1 class="calc-title">복리 계산기</h1>
+      <p class="calc-subtitle">원금과 이자가 재투자되어 시간이 지날수록 급격히 불어나는 장기 복리의 마법을 시뮬레이션합니다.</p>
+    </div>
+
+    <div class="calc-layout">
+      <!-- 입력 폼 -->
+      <div class="calc-card form-card">
+        <form id="compound-form">
+          <!-- 초기 투자 금액 -->
+          <div class="form-group">
+            <label for="input-init" class="form-label">
+              초기 투자금 (시드머니)
+              <span class="currency-hint" id="init-hint"></span>
+            </label>
+            <div class="input-with-unit">
+              <input type="text" id="input-init" class="form-input" placeholder="예: 10,000,000" value="10,000,000" inputmode="numeric">
+              <span class="input-unit">원</span>
+            </div>
+            <div class="quick-btn-group">
+              <button type="button" class="quick-btn" data-add-init="5000000">+500만</button>
+              <button type="button" class="quick-btn" data-add-init="10000000">+1,000만</button>
+              <button type="button" class="quick-btn" data-add-init="50000000">+5,000만</button>
+              <button type="button" class="quick-btn reset-init-btn">0원</button>
+            </div>
+          </div>
+
+          <!-- 매월 추가 적립금 -->
+          <div class="form-group">
+            <label for="input-monthly-add" class="form-label">
+              매월 추가 적립금
+              <span class="currency-hint" id="monthly-add-hint"></span>
+            </label>
+            <div class="input-with-unit">
+              <input type="text" id="input-monthly-add" class="form-input" placeholder="예: 500,000" value="500,000" inputmode="numeric">
+              <span class="input-unit">원</span>
+            </div>
+            <div class="quick-btn-group">
+              <button type="button" class="quick-btn" data-add-mo="200000">+20만</button>
+              <button type="button" class="quick-btn" data-add-mo="500000">+50만</button>
+              <button type="button" class="quick-btn" data-add-mo="1000000">+100만</button>
+              <button type="button" class="quick-btn reset-mo-btn">0원</button>
+            </div>
+          </div>
+
+          <!-- 투자 기간 (년) -->
+          <div class="form-group">
+            <label for="input-years" class="form-label">투자 기간 (년)</label>
+            <div class="input-with-unit">
+              <input type="number" id="input-years" class="form-input" min="1" max="50" value="10">
+              <span class="input-unit">년</span>
+            </div>
+            <div class="quick-btn-group">
+              <button type="button" class="quick-btn year-btn" data-val="5">5년</button>
+              <button type="button" class="quick-btn year-btn active" data-val="10">10년</button>
+              <button type="button" class="quick-btn year-btn" data-val="20">20년</button>
+              <button type="button" class="quick-btn year-btn" data-val="30">30년</button>
+            </div>
+          </div>
+
+          <!-- 연 수익률 (%) -->
+          <div class="form-group">
+            <label for="input-return-rate" class="form-label">연간 복리 수익률 (%)</label>
+            <div class="input-with-unit">
+              <input type="number" id="input-return-rate" class="form-input" step="0.1" min="0.1" max="100" value="7.0">
+              <span class="input-unit">%</span>
+            </div>
+            <div class="quick-btn-group">
+              <button type="button" class="quick-btn rate-preset-btn" data-rate="4.0">예금형 4%</button>
+              <button type="button" class="quick-btn rate-preset-btn active" data-rate="7.0">S&P500 7%</button>
+              <button type="button" class="quick-btn rate-preset-btn" data-rate="10.0">성장형 10%</button>
+            </div>
+          </div>
+
+          <div class="btn-action-group">
+            <button type="submit" class="btn btn-primary"><i class="fa-solid fa-calculator"></i> 복리 계산하기</button>
+            <button type="button" id="btn-share-page" class="btn btn-secondary"><i class="fa-regular fa-share-from-square"></i> 링크 공유</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- 결과 카드 -->
+      <div class="calc-card result-card">
+        <div class="result-header">
+          <span class="result-label"><span id="res-years-badge">10</span>년 후 최종 예상 자산</span>
+          <div class="result-total-amount" id="res-final-balance">106,787,058원</div>
+          <div class="result-sub-korean" id="res-balance-korean">1억 678만원</div>
+        </div>
+
+        <div class="result-stats-grid">
+          <div class="stat-box">
+            <span class="stat-title">총 납입 원금</span>
+            <strong class="stat-value" id="res-total-principal">70,000,000원</strong>
+          </div>
+          <div class="stat-box">
+            <span class="stat-title">누적 복리 수익금</span>
+            <strong class="stat-value text-accent" id="res-total-interest">36,787,058원</strong>
+          </div>
+          <div class="stat-box">
+            <span class="stat-title">원금 대비 총수익률</span>
+            <strong class="stat-value text-success" id="res-return-rate">+52.6%</strong>
+          </div>
+          <div class="stat-box">
+            <span class="stat-title">72의 법칙 (2배 기간)</span>
+            <strong class="stat-value" id="res-rule72">약 10.3년</strong>
+          </div>
+        </div>
+
+        <div class="info-callout">
+          <i class="fa-solid fa-snowflake"></i>
+          <div>
+            <strong>72의 법칙(Rule of 72)이란?</strong>
+            <p id="rule-desc">복리로 자산이 2배가 되는 데 걸리는 기간을 계산하는 공식입니다. 연 <span id="current-rate-text">7.0</span>%의 수익률이라면 약 <span id="current-rule-years">10.3</span>년마다 자산이 2배가 됩니다.</p>
+          </div>
+        </div>
+
+        <!-- 연도별 자산 추이 테이블 -->
+        <div class="table-card">
+          <h4 class="table-card-title"><i class="fa-solid fa-calendar-days"></i> 연도별 자산 성장 시뮬레이션</h4>
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>경과 연수</th>
+                  <th>누적 원금</th>
+                  <th>누적 복리수익</th>
+                  <th>총 평가 자산</th>
+                </tr>
+              </thead>
+              <tbody id="compound-schedule-body">
+                <!-- 동적 렌더링 -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 패밀리 배너 -->
+    <section class="nolja-family-banner">
+      <div class="nfb-header">
+        <span class="nfb-badge">FAMILY SERVICES</span>
+        <h3 class="nfb-title">놀자 & 도구 패밀리 서비스</h3>
+      </div>
+      <div class="nfb-grid">
+        <a href="https://work.chatgpts.kr" target="_blank" rel="noopener" class="nfb-card"><span class="nfb-icon">💼</span><div class="nfb-info"><span class="nfb-name">직장인 업무도구</span><span class="nfb-sub">연봉·퇴직금</span></div></a>
+        <a href="https://history.chatgpts.kr" target="_blank" rel="noopener" class="nfb-card"><span class="nfb-icon">🏛️</span><div class="nfb-info"><span class="nfb-name">역사야놀자</span><span class="nfb-sub">역사 퀴즈</span></div></a>
+        <a href="https://fortune.chatgpts.kr" target="_blank" rel="noopener" class="nfb-card"><span class="nfb-icon">🔮</span><div class="nfb-info"><span class="nfb-name">운세놀자</span><span class="nfb-sub">타로·운세</span></div></a>
+        <a href="https://mind.chatgpts.kr" target="_blank" rel="noopener" class="nfb-card"><span class="nfb-icon">🧠</span><div class="nfb-info"><span class="nfb-name">심리테스트</span><span class="nfb-sub">성격 유형</span></div></a>
+      </div>
+    </section>
+
+    <!-- 면책 조항 -->
+    <div class="disclaimer-card">
+      <i class="fa-solid fa-triangle-exclamation"></i>
+      <div>
+        <strong>면책 고지</strong>
+        <p>본 계산 결과는 일정한 연간 복리 수익률을 가정한 시뮬레이션입니다. 실제 투자는 시장 상황에 따라 가격 변동 및 원금 손실이 발생할 수 있으며, 과거의 수익률이 미래의 성과를 보장하지 않습니다.</p>
+      </div>
+    </div>
+
+    <!-- 광고 슬롯 -->
+    <div class="ad-slot">
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-3321070604000141"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+      <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-container">
+      <div class="footer-col">
+        <div class="footer-logo">💰 돈공부 도구</div>
+        <p class="footer-copy">스마트한 자산 형성을 돕는 무료 생활 금융 플랫폼</p>
+      </div>
+      <div class="footer-col">
+        <h4>도구 바로가기</h4>
+        <ul class="footer-links">
+          <li><a href="/deposit">정기예금 계산기</a></li>
+          <li><a href="/savings">정기적금 계산기</a></li>
+          <li><a href="/compound">복리 계산기</a></li>
+          <li><a href="/loan">대출이자 계산기</a></li>
+          <li><a href="/return">투자수익률 계산기</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>패밀리 서비스</h4>
+        <ul class="footer-links">
+          <li><a href="https://work.chatgpts.kr" target="_blank" rel="noopener">직장인 업무도구</a></li>
+          <li><a href="https://history.chatgpts.kr" target="_blank" rel="noopener">역사야놀자</a></li>
+          <li><a href="https://mind.chatgpts.kr" target="_blank" rel="noopener">심리테스트</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 돈공부 도구. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="js/common.js"></script>
+  <script src="js/calculators.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const initInput = document.getElementById('input-init');
+      const initHint = document.getElementById('init-hint');
+      const moInput = document.getElementById('input-monthly-add');
+      const moHint = document.getElementById('monthly-add-hint');
+      const yearsInput = document.getElementById('input-years');
+      const rateInput = document.getElementById('input-return-rate');
+      const form = document.getElementById('compound-form');
+
+      attachNumberInputFormatter(initInput, initHint);
+      attachNumberInputFormatter(moInput, moHint);
+
+      // 빠른 초기금
+      document.querySelectorAll('[data-add-init]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const val = parseNumber(initInput.value) + parseInt(btn.dataset.addInit, 10);
+          initInput.value = formatNumber(val);
+          initHint.textContent = formatKoreanCurrency(val);
+          initHint.style.display = 'block';
+          doCalculate();
+        });
+      });
+      document.querySelector('.reset-init-btn')?.addEventListener('click', () => {
+        initInput.value = '0';
+        initHint.textContent = '';
+        doCalculate();
+      });
+
+      // 빠른 매월적립금
+      document.querySelectorAll('[data-add-mo]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const val = parseNumber(moInput.value) + parseInt(btn.dataset.addMo, 10);
+          moInput.value = formatNumber(val);
+          moHint.textContent = formatKoreanCurrency(val);
+          moHint.style.display = 'block';
+          doCalculate();
+        });
+      });
+      document.querySelector('.reset-mo-btn')?.addEventListener('click', () => {
+        moInput.value = '0';
+        moHint.textContent = '';
+        doCalculate();
+      });
+
+      // 년수 프리셋
+      document.querySelectorAll('.year-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.year-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          yearsInput.value = btn.dataset.val;
+          doCalculate();
+        });
+      });
+
+      // 수익률 프리셋
+      document.querySelectorAll('.rate-preset-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.rate-preset-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          rateInput.value = btn.dataset.rate;
+          doCalculate();
+        });
+      });
+
+      function doCalculate() {
+        const initialPrincipal = parseNumber(initInput.value);
+        const monthlyAddition = parseNumber(moInput.value);
+        const years = parseInt(yearsInput.value, 10) || 10;
+        const rate = parseFloat(rateInput.value) || 7.0;
+
+        const res = calculateCompound({
+          initialPrincipal,
+          monthlyAddition,
+          annualRatePercent: rate,
+          years
+        });
+
+        document.getElementById('res-years-badge').textContent = years;
+        document.getElementById('res-final-balance').textContent = `${formatNumber(res.finalBalance)}원`;
+        document.getElementById('res-balance-korean').textContent = formatKoreanCurrency(res.finalBalance);
+        document.getElementById('res-total-principal').textContent = `${formatNumber(res.totalPrincipal)}원`;
+        document.getElementById('res-total-interest').textContent = `+${formatNumber(res.totalInterest)}원`;
+        document.getElementById('res-return-rate').textContent = `+${res.returnRate.toFixed(1)}%`;
+        document.getElementById('res-rule72').textContent = `약 ${res.ruleOf72Years}년`;
+        document.getElementById('current-rate-text').textContent = rate;
+        document.getElementById('current-rule-years').textContent = res.ruleOf72Years;
+
+        // 테이블 렌더링
+        const tbody = document.getElementById('compound-schedule-body');
+        tbody.innerHTML = '';
+        res.schedule.forEach(row => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td><strong>${row.year}년차</strong></td>
+            <td>${formatNumber(row.totalPrincipal)}원</td>
+            <td class="text-accent">+${formatNumber(row.totalInterest)}원</td>
+            <td class="text-bold">${formatNumber(row.totalBalance)}원</td>
+          `;
+          tbody.appendChild(tr);
+        });
+      }
+
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        doCalculate();
+      });
+
+      yearsInput.addEventListener('input', doCalculate);
+      rateInput.addEventListener('input', doCalculate);
+
+      doCalculate();
+    });
+  </script>
+  <script src="js/track.js" data-service="money"></script>
+</body>
+</html>

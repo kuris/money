@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>대출이자 계산기 - 원리금균등, 원금균등, 만기일시 상환표 | 돈공부 도구</title>
+  <meta name="description" content="대출 이자 및 월 상환액을 원리금균등, 원금균등, 만기일시 상환 방식과 거치기간별로 계산하고 전 회차별 상환 스케줄표를 제공합니다.">
+  <meta name="keywords" content="대출이자 계산기, 원리금균등상환 계산기, 원금균등상환, 만기일시상환, 대출 상환 스케줄, 주택담보대출 이자, 신용대출 이자">
+  <link rel="canonical" href="https://money.chatgpts.kr/loan">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="돈공부 도구">
+  <meta property="og:title" content="대출이자 계산기 - 상환 방식별 월 상환액 & 스케줄">
+  <meta property="og:description" content="대출 원금과 금리를 입력하고 원리금균등, 원금균등 방식별 월 상환금과 총이자액을 비교해보세요.">
+  <meta property="og:url" content="https://money.chatgpts.kr/loan">
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Ctext%20y%3D%22.9em%22%20font-size%3D%2290%22%3E%F0%9F%A7%BE%3C%2Ftext%3E%3C%2Fsvg%3E">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3321070604000141" crossorigin="anonymous"></script>
+  <!-- Vercel Analytics -->
+  <script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
+  <script defer src="/_vercel/insights/script.js"></script>
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="navbar-container">
+      <a href="/" class="brand-logo">
+        <span class="logo-icon">💰</span>
+        <span class="logo-title">돈공부 도구</span>
+      </a>
+
+      <nav class="nav-links">
+        <a href="/" class="nav-link">홈</a>
+        <a href="/deposit" class="nav-link">예금</a>
+        <a href="/savings" class="nav-link">적금</a>
+        <a href="/compound" class="nav-link">복리</a>
+        <a href="/loan" class="nav-link active">대출이자</a>
+        <a href="/return" class="nav-link">투자수익률</a>
+        <a href="/terms" class="nav-link">금융용어</a>
+      </nav>
+
+      <div class="nav-actions">
+        <div class="family-dropdown">
+          <button id="family-toggle-btn" class="family-btn" aria-haspopup="true" aria-expanded="false">
+            <span>패밀리 서비스</span>
+            <i class="fa-solid fa-chevron-down"></i>
+          </button>
+          <div id="family-dropdown-menu" class="family-menu">
+            <div class="family-menu-header">놀자 & 도구 시리즈</div>
+            <a href="https://voca.chatgpts.kr" target="_blank" rel="noopener" class="family-item"><span class="fi-icon">📖</span><div><strong>낱말놀자</strong><p>단어 퀴즈</p></div></a>
+            <a href="https://hanja.chatgpts.kr" target="_blank" rel="noopener" class="family-item"><span class="fi-icon">🏮</span><div><strong>한자놀자</strong><p>급수 한자</p></div></a>
+            <a href="https://history.chatgpts.kr" target="_blank" rel="noopener" class="family-item"><span class="fi-icon">🏛️</span><div><strong>역사야놀자</strong><p>역사 퀴즈</p></div></a>
+            <a href="https://fortune.chatgpts.kr" target="_blank" rel="noopener" class="family-item"><span class="fi-icon">🔮</span><div><strong>운세놀자</strong><p>타로·운세</p></div></a>
+            <a href="https://mind.chatgpts.kr" target="_blank" rel="noopener" class="family-item"><span class="fi-icon">🧠</span><div><strong>심리테스트</strong><p>성격 검사</p></div></a>
+            <a href="https://work.chatgpts.kr" target="_blank" rel="noopener" class="family-item"><span class="fi-icon">💼</span><div><strong>직장인 업무도구</strong><p>연봉 계산기</p></div></a>
+            <a href="https://money.chatgpts.kr" class="family-item active"><span class="fi-icon">💰</span><div><strong>돈공부 도구 (현재)</strong><p>금융 계산기</p></div></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="page-container">
+    <div class="calc-header">
+      <div class="calc-badge"><i class="fa-solid fa-receipt"></i> 부채 관리</div>
+      <h1 class="calc-title">대출이자 계산기</h1>
+      <p class="calc-subtitle">원리금균등, 원금균등, 만기일시 상환 방식과 거치기간에 따른 월별 상환금과 총이자액을 계산합니다.</p>
+    </div>
+
+    <div class="calc-layout">
+      <!-- 폼 -->
+      <div class="calc-card form-card">
+        <form id="loan-form">
+          <!-- 대출 원금 -->
+          <div class="form-group">
+            <label for="input-loan-principal" class="form-label">
+              대출 원금
+              <span class="currency-hint" id="loan-principal-hint"></span>
+            </label>
+            <div class="input-with-unit">
+              <input type="text" id="input-loan-principal" class="form-input" placeholder="예: 100,000,000" value="100,000,000" inputmode="numeric">
+              <span class="input-unit">원</span>
+            </div>
+            <div class="quick-btn-group">
+              <button type="button" class="quick-btn" data-add="10000000">+1,000만</button>
+              <button type="button" class="quick-btn" data-add="30000000">+3,000만</button>
+              <button type="button" class="quick-btn" data-add="50000000">+5,000만</button>
+              <button type="button" class="quick-btn" data-add="100000000">+1억</button>
+              <button type="button" class="quick-btn reset-btn">초기화</button>
+            </div>
+          </div>
+
+          <!-- 대출 기간 -->
+          <div class="form-group">
+            <label for="input-loan-months" class="form-label">대출 기간 (개월)</label>
+            <div class="input-with-unit">
+              <input type="number" id="input-loan-months" class="form-input" min="1" max="480" value="360">
+              <span class="input-unit">개월</span>
+            </div>
+            <div class="quick-btn-group">
+              <button type="button" class="quick-btn period-btn" data-val="12">1년 (12개월)</button>
+              <button type="button" class="quick-btn period-btn" data-val="36">3년 (36개월)</button>
+              <button type="button" class="quick-btn period-btn" data-val="60">5년 (60개월)</button>
+              <button type="button" class="quick-btn period-btn" data-val="120">10년 (120개월)</button>
+              <button type="button" class="quick-btn period-btn active" data-val="360">30년 (360개월)</button>
+            </div>
+          </div>
+
+          <!-- 연이자율 -->
+          <div class="form-group">
+            <label for="input-loan-rate" class="form-label">연 이자율 (%)</label>
+            <div class="input-with-unit">
+              <input type="number" id="input-loan-rate" class="form-input" step="0.05" min="0.1" max="30" value="4.00">
+              <span class="input-unit">%</span>
+            </div>
+          </div>
+
+          <!-- 거치 기간 (옵션) -->
+          <div class="form-group">
+            <label for="input-grace-months" class="form-label">거치 기간 (이자만 내는 기간)</label>
+            <div class="input-with-unit">
+              <input type="number" id="input-grace-months" class="form-input" min="0" max="60" value="0">
+              <span class="input-unit">개월</span>
+            </div>
+          </div>
+
+          <!-- 상환 방식 -->
+          <div class="form-group">
+            <label class="form-label">상환 방식</label>
+            <div class="radio-tab-group vertical-stack">
+              <label class="radio-tab">
+                <input type="radio" name="repaymentType" value="level" checked>
+                <div>
+                  <strong>원리금 균등 분할 상환</strong>
+                  <p class="radio-subtext">매월 갚는 금액(원금+이자)이 동일 (가계 예산 계획에 유리)</p>
+                </div>
+              </label>
+              <label class="radio-tab">
+                <input type="radio" name="repaymentType" value="equal_principal">
+                <div>
+                  <strong>원금 균등 분할 상환</strong>
+                  <p class="radio-subtext">매월 갚는 원금이 일정, 총이자 비용이 가장 적음</p>
+                </div>
+              </label>
+              <label class="radio-tab">
+                <input type="radio" name="repaymentType" value="bullet">
+                <div>
+                  <strong>만기 일시 상환</strong>
+                  <p class="radio-subtext">만기까지 이자만 내고 만기에 원금 전액 상환</p>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <div class="btn-action-group">
+            <button type="submit" class="btn btn-primary"><i class="fa-solid fa-calculator"></i> 대출 이자 계산</button>
+            <button type="button" id="btn-share-page" class="btn btn-secondary"><i class="fa-regular fa-share-from-square"></i> 링크 공유</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- 결과 카드 -->
+      <div class="calc-card result-card">
+        <div class="result-header">
+          <span class="result-label">1회차 예상 월 상환액</span>
+          <div class="result-total-amount" id="res-monthly-payment">477,415원</div>
+          <div class="result-sub-korean" id="res-monthly-korean">사십칠만 칠천사백십오원</div>
+        </div>
+
+        <div class="result-stats-grid">
+          <div class="stat-box">
+            <span class="stat-title">대출 원금</span>
+            <strong class="stat-value" id="res-loan-principal">100,000,000원</strong>
+          </div>
+          <div class="stat-box">
+            <span class="stat-title">총 대출 이자</span>
+            <strong class="stat-value text-danger" id="res-total-interest">71,869,511원</strong>
+          </div>
+          <div class="stat-box">
+            <span class="stat-title">총 상환 금액</span>
+            <strong class="stat-value" id="res-total-payment">171,869,511원</strong>
+          </div>
+          <div class="stat-box">
+            <span class="stat-title">원금 대비 총이자율</span>
+            <strong class="stat-value text-accent" id="res-interest-ratio">71.9%</strong>
+          </div>
+        </div>
+
+        <div class="info-callout">
+          <i class="fa-solid fa-lightbulb"></i>
+          <div>
+            <strong>상환 방식 선택 가이드</strong>
+            <p id="repay-guide-text">원리금균등 방식은 매달 지출 금액이 일정해 고정 지출 관리가 편합니다. 반면 원금균등 방식은 초기에 부담이 크지만 총이자액이 수백만원 이상 절감될 수 있습니다.</p>
+          </div>
+        </div>
+
+        <!-- 상환 스케줄 테이블 -->
+        <div class="table-card">
+          <div class="table-card-header-flex">
+            <h4 class="table-card-title"><i class="fa-solid fa-table-list"></i> 월별 상환 스케줄표</h4>
+            <span class="table-card-badge" id="schedule-count-badge">총 360회차</span>
+          </div>
+          <div class="table-responsive schedule-table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>회차</th>
+                  <th>월 상환금</th>
+                  <th>납부 원금</th>
+                  <th>납부 이자</th>
+                  <th>대출 잔액</th>
+                </tr>
+              </thead>
+              <tbody id="loan-schedule-body">
+                <!-- 동적 렌더링 -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 패밀리 배너 -->
+    <section class="nolja-family-banner">
+      <div class="nfb-header">
+        <span class="nfb-badge">FAMILY SERVICES</span>
+        <h3 class="nfb-title">놀자 & 도구 패밀리 서비스</h3>
+      </div>
+      <div class="nfb-grid">
+        <a href="https://work.chatgpts.kr" target="_blank" rel="noopener" class="nfb-card"><span class="nfb-icon">💼</span><div class="nfb-info"><span class="nfb-name">직장인 업무도구</span><span class="nfb-sub">연봉·퇴직금</span></div></a>
+        <a href="https://history.chatgpts.kr" target="_blank" rel="noopener" class="nfb-card"><span class="nfb-icon">🏛️</span><div class="nfb-info"><span class="nfb-name">역사야놀자</span><span class="nfb-sub">역사 퀴즈</span></div></a>
+        <a href="https://fortune.chatgpts.kr" target="_blank" rel="noopener" class="nfb-card"><span class="nfb-icon">🔮</span><div class="nfb-info"><span class="nfb-name">운세놀자</span><span class="nfb-sub">타로·운세</span></div></a>
+        <a href="https://mind.chatgpts.kr" target="_blank" rel="noopener" class="nfb-card"><span class="nfb-icon">🧠</span><div class="nfb-info"><span class="nfb-name">심리테스트</span><span class="nfb-sub">성격 유형</span></div></a>
+      </div>
+    </section>
+
+    <!-- 면책 조항 -->
+    <div class="disclaimer-card">
+      <i class="fa-solid fa-triangle-exclamation"></i>
+      <div>
+        <strong>면책 고지</strong>
+        <p>본 계산 결과는 월 단위 표준 수식을 적용한 시뮬레이션입니다. 실제 은행 대출은 실행일 기준 일수 계산(초일산입, 윤년 등) 및 기준금리 변동 주기에 따라 실제 상환 금액과 차이가 날 수 있습니다.</p>
+      </div>
+    </div>
+
+    <!-- 광고 슬롯 -->
+    <div class="ad-slot">
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-3321070604000141"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+      <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-container">
+      <div class="footer-col">
+        <div class="footer-logo">💰 돈공부 도구</div>
+        <p class="footer-copy">스마트한 자산 형성을 돕는 무료 생활 금융 플랫폼</p>
+      </div>
+      <div class="footer-col">
+        <h4>도구 바로가기</h4>
+        <ul class="footer-links">
+          <li><a href="/deposit">정기예금 계산기</a></li>
+          <li><a href="/savings">정기적금 계산기</a></li>
+          <li><a href="/compound">복리 계산기</a></li>
+          <li><a href="/loan">대출이자 계산기</a></li>
+          <li><a href="/return">투자수익률 계산기</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>패밀리 서비스</h4>
+        <ul class="footer-links">
+          <li><a href="https://work.chatgpts.kr" target="_blank" rel="noopener">직장인 업무도구</a></li>
+          <li><a href="https://fortune.chatgpts.kr" target="_blank" rel="noopener">운세놀자</a></li>
+          <li><a href="https://history.chatgpts.kr" target="_blank" rel="noopener">역사야놀자</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 돈공부 도구. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="js/common.js"></script>
+  <script src="js/calculators.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const pInput = document.getElementById('input-loan-principal');
+      const pHint = document.getElementById('loan-principal-hint');
+      const monthsInput = document.getElementById('input-loan-months');
+      const rateInput = document.getElementById('input-loan-rate');
+      const graceInput = document.getElementById('input-grace-months');
+      const form = document.getElementById('loan-form');
+
+      attachNumberInputFormatter(pInput, pHint);
+
+      document.querySelectorAll('.quick-btn[data-add]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const val = parseNumber(pInput.value) + parseInt(btn.dataset.add, 10);
+          pInput.value = formatNumber(val);
+          pHint.textContent = formatKoreanCurrency(val);
+          pHint.style.display = 'block';
+          doCalculate();
+        });
+      });
+      document.querySelector('.reset-btn')?.addEventListener('click', () => {
+        pInput.value = '0';
+        pHint.textContent = '';
+        doCalculate();
+      });
+
+      document.querySelectorAll('.period-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.period-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          monthsInput.value = btn.dataset.val;
+          doCalculate();
+        });
+      });
+
+      function doCalculate() {
+        const principal = parseNumber(pInput.value);
+        const months = parseInt(monthsInput.value, 10) || 12;
+        const rate = parseFloat(rateInput.value) || 4.0;
+        const grace = parseInt(graceInput.value, 10) || 0;
+        const repaymentType = document.querySelector('input[name="repaymentType"]:checked')?.value || 'level';
+
+        const res = calculateLoan({
+          principal,
+          annualRatePercent: rate,
+          months,
+          gracePeriodMonths: grace,
+          repaymentType
+        });
+
+        document.getElementById('res-monthly-payment').textContent = `${formatNumber(res.firstMonthPayment)}원`;
+        document.getElementById('res-monthly-korean').textContent = formatKoreanCurrency(res.firstMonthPayment);
+        document.getElementById('res-loan-principal').textContent = `${formatNumber(res.principal)}원`;
+        document.getElementById('res-total-interest').textContent = `${formatNumber(res.totalInterest)}원`;
+        document.getElementById('res-total-payment').textContent = `${formatNumber(res.totalPayment)}원`;
+        const ratio = res.principal > 0 ? ((res.totalInterest / res.principal) * 100).toFixed(1) : '0';
+        document.getElementById('res-interest-ratio').textContent = `${ratio}%`;
+        document.getElementById('schedule-count-badge').textContent = `총 ${res.schedule.length}회차`;
+
+        // 스케줄 테이블 렌더링 (최대 120회차까지만 먼저 그리고 더보기 가능하도록)
+        const tbody = document.getElementById('loan-schedule-body');
+        tbody.innerHTML = '';
+        const limit = Math.min(res.schedule.length, 120);
+        for (let i = 0; i < limit; i++) {
+          const row = res.schedule[i];
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td><strong>${row.month}회차${row.isGrace ? ' (거치)' : ''}</strong></td>
+            <td class="text-bold">${formatNumber(row.payment)}원</td>
+            <td>${formatNumber(row.principalPaid)}원</td>
+            <td class="text-danger">${formatNumber(row.interestPaid)}원</td>
+            <td>${formatNumber(row.remainingPrincipal)}원</td>
+          `;
+          tbody.appendChild(tr);
+        }
+        if (res.schedule.length > limit) {
+          const trMore = document.createElement('tr');
+          trMore.innerHTML = `
+            <td colspan="5" style="text-align:center; padding:12px; color:var(--text-muted);">
+              ... 외 총 ${res.schedule.length}회차 (상위 120회차 표시 중) ...
+            </td>
+          `;
+          tbody.appendChild(trMore);
+        }
+      }
+
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        doCalculate();
+      });
+
+      document.querySelectorAll('input[name="repaymentType"]').forEach(r => {
+        r.addEventListener('change', doCalculate);
+      });
+      monthsInput.addEventListener('input', doCalculate);
+      rateInput.addEventListener('input', doCalculate);
+      graceInput.addEventListener('input', doCalculate);
+
+      doCalculate();
+    });
+  </script>
+  <script src="js/track.js" data-service="money"></script>
+</body>
+</html>

@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>경제·금융 용어 사전 - DSR, 복리, PER, 기준금리 뜻 | 돈공부 도구</title>
+  <meta name="description" content="DSR, LTV, CAGR, PER, PBR, ISA, 기준금리, 인플레이션 등 재테크 뉴스와 금융 거래에 꼭 필요한 필수 경제 용어를 알기 쉽게 정리한 사전입니다.">
+  <meta name="keywords" content="경제용어사전, 금융용어, DSR 뜻, LTV 뜻, 복리 계산, PER PBR 뜻, ISA 계좌, 재테크 상식">
+  <link rel="canonical" href="https://money.chatgpts.kr/terms">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="돈공부 도구">
+  <meta property="og:title" content="경제·금융 용어 사전 - 필수 재테크 상식">
+  <meta property="og:description" content="어려운 금융 용어를 쉬운 예시와 실전 팁으로 이해해보세요.">
+  <meta property="og:url" content="https://money.chatgpts.kr/terms">
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Ctext%20y%3D%22.9em%22%20font-size%3D%2290%22%3E%F0%9F%93%96%3C%2Ftext%3E%3C%2Fsvg%3E">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3321070604000141" crossorigin="anonymous"></script>
+  <!-- Vercel Analytics -->
+  <script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
+  <script defer src="/_vercel/insights/script.js"></script>
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="navbar-container">
+      <a href="/" class="brand-logo">
+        <span class="logo-icon">💰</span>
+        <span class="logo-title">돈공부 도구</span>
+      </a>
+
+      <nav class="nav-links">
+        <a href="/" class="nav-link">홈</a>
+        <a href="/deposit" class="nav-link">예금</a>
+        <a href="/savings" class="nav-link">적금</a>
+        <a href="/compound" class="nav-link">복리</a>
+        <a href="/loan" class="nav-link">대출이자</a>
+        <a href="/return" class="nav-link">투자수익률</a>
+        <a href="/terms" class="nav-link active">금융용어</a>
+      </nav>
+
+      <div class="nav-actions">
+        <div class="family-dropdown">
+          <button id="family-toggle-btn" class="family-btn" aria-haspopup="true" aria-expanded="false">
+            <span>패밀리 서비스</span>
+            <i class="fa-solid fa-chevron-down"></i>
+          </button>
+          <div id="family-dropdown-menu" class="family-menu">
+            <div class="family-menu-header">놀자 & 도구 시리즈</div>
+            <a href="https://voca.chatgpts.kr" target="_blank" rel="noopener" class="family-item"><span class="fi-icon">📖</span><div><strong>낱말놀자</strong><p>단어 퀴즈</p></div></a>
+            <a href="https://hanja.chatgpts.kr" target="_blank" rel="noopener" class="family-item"><span class="fi-icon">🏮</span><div><strong>한자놀자</strong><p>급수 한자</p></div></a>
+            <a href="https://history.chatgpts.kr" target="_blank" rel="noopener" class="family-item"><span class="fi-icon">🏛️</span><div><strong>역사야놀자</strong><p>역사 퀴즈</p></div></a>
+            <a href="https://fortune.chatgpts.kr" target="_blank" rel="noopener" class="family-item"><span class="fi-icon">🔮</span><div><strong>운세놀자</strong><p>타로·운세</p></div></a>
+            <a href="https://mind.chatgpts.kr" target="_blank" rel="noopener" class="family-item"><span class="fi-icon">🧠</span><div><strong>심리테스트</strong><p>성격 검사</p></div></a>
+            <a href="https://work.chatgpts.kr" target="_blank" rel="noopener" class="family-item"><span class="fi-icon">💼</span><div><strong>직장인 업무도구</strong><p>연봉 계산기</p></div></a>
+            <a href="https://money.chatgpts.kr" class="family-item active"><span class="fi-icon">💰</span><div><strong>돈공부 도구 (현재)</strong><p>금융 계산기</p></div></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="page-container">
+    <div class="calc-header">
+      <div class="calc-badge"><i class="fa-solid fa-book-bookmark"></i> 돈공부 필수 사전</div>
+      <h1 class="calc-title">경제 & 금융 용어 사전</h1>
+      <p class="calc-subtitle">뉴스나 대출, 투자 시 헷갈리는 필수 금융 용어를 쉬운 해설과 실전 팁으로 찾아보세요.</p>
+    </div>
+
+    <!-- 검색창 & 필터 바 -->
+    <div class="terms-search-section">
+      <div class="terms-search-bar">
+        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+        <input type="text" id="terms-search-input" placeholder="용어나 키워드를 검색해보세요 (예: DSR, 복리, PER, 세금)" autocomplete="off">
+        <button type="button" id="terms-clear-btn" class="terms-clear-btn" style="display:none;"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <div class="category-tabs" id="category-tabs">
+        <button type="button" class="category-btn active" data-cat="all">전체보기</button>
+        <button type="button" class="category-btn" data-cat="기초/예적금">기초/예적금</button>
+        <button type="button" class="category-btn" data-cat="주식/투자">주식/투자</button>
+        <button type="button" class="category-btn" data-cat="대출/부동산">대출/부동산</button>
+        <button type="button" class="category-btn" data-cat="세금/절세">세금/절세</button>
+        <button type="button" class="category-btn" data-cat="거시경제/환율">거시경제/환율</button>
+      </div>
+    </div>
+
+    <!-- 결과 안내 바 -->
+    <div class="terms-meta-bar">
+      <span>총 <strong id="terms-count">0</strong>개의 용어가 있습니다.</span>
+    </div>
+
+    <!-- 용어 카드 그리드 -->
+    <div class="terms-grid" id="terms-container">
+      <!-- 동적 렌더링 -->
+    </div>
+
+    <!-- 검색 결과 없음 상태 -->
+    <div class="empty-state" id="terms-empty-state" style="display:none;">
+      <i class="fa-regular fa-face-frown"></i>
+      <h3>일치하는 용어를 찾을 수 없습니다.</h3>
+      <p>다른 검색어를 입력하거나 카테고리 필터를 변경해보세요.</p>
+    </div>
+
+    <!-- 패밀리 배너 -->
+    <section class="nolja-family-banner">
+      <div class="nfb-header">
+        <span class="nfb-badge">FAMILY SERVICES</span>
+        <h3 class="nfb-title">놀자 & 도구 패밀리 서비스</h3>
+      </div>
+      <div class="nfb-grid">
+        <a href="https://work.chatgpts.kr" target="_blank" rel="noopener" class="nfb-card"><span class="nfb-icon">💼</span><div class="nfb-info"><span class="nfb-name">직장인 업무도구</span><span class="nfb-sub">연봉·퇴직금</span></div></a>
+        <a href="https://history.chatgpts.kr" target="_blank" rel="noopener" class="nfb-card"><span class="nfb-icon">🏛️</span><div class="nfb-info"><span class="nfb-name">역사야놀자</span><span class="nfb-sub">역사 퀴즈</span></div></a>
+        <a href="https://fortune.chatgpts.kr" target="_blank" rel="noopener" class="nfb-card"><span class="nfb-icon">🔮</span><div class="nfb-info"><span class="nfb-name">운세놀자</span><span class="nfb-sub">타로·운세</span></div></a>
+        <a href="https://mind.chatgpts.kr" target="_blank" rel="noopener" class="nfb-card"><span class="nfb-icon">🧠</span><div class="nfb-info"><span class="nfb-name">심리테스트</span><span class="nfb-sub">성격 유형</span></div></a>
+      </div>
+    </section>
+
+    <!-- 면책 조항 -->
+    <div class="disclaimer-card">
+      <i class="fa-solid fa-triangle-exclamation"></i>
+      <div>
+        <strong>안내</strong>
+        <p>본 용어 사전의 내용은 경제 상식 학습을 돕기 위해 작성되었습니다. 세법이나 금융 규제는 정책에 따라 변동될 수 있으므로 실제 금융 거래 전 관계 기관(금융감독원, 국세청 등)의 최신 기준을 확인하시기 바랍니다.</p>
+      </div>
+    </div>
+
+    <!-- 광고 슬롯 -->
+    <div class="ad-slot">
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-3321070604000141"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+      <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-container">
+      <div class="footer-col">
+        <div class="footer-logo">💰 돈공부 도구</div>
+        <p class="footer-copy">스마트한 자산 형성을 돕는 무료 생활 금융 플랫폼</p>
+      </div>
+      <div class="footer-col">
+        <h4>도구 바로가기</h4>
+        <ul class="footer-links">
+          <li><a href="/deposit">정기예금 계산기</a></li>
+          <li><a href="/savings">정기적금 계산기</a></li>
+          <li><a href="/compound">복리 계산기</a></li>
+          <li><a href="/loan">대출이자 계산기</a></li>
+          <li><a href="/return">투자수익률 계산기</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>패밀리 서비스</h4>
+        <ul class="footer-links">
+          <li><a href="https://work.chatgpts.kr" target="_blank" rel="noopener">직장인 업무도구</a></li>
+          <li><a href="https://fortune.chatgpts.kr" target="_blank" rel="noopener">운세놀자</a></li>
+          <li><a href="https://mind.chatgpts.kr" target="_blank" rel="noopener">심리테스트</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 돈공부 도구. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="js/common.js"></script>
+  <script src="js/terms-data.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const searchInput = document.getElementById('terms-search-input');
+      const clearBtn = document.getElementById('terms-clear-btn');
+      const container = document.getElementById('terms-container');
+      const emptyState = document.getElementById('terms-empty-state');
+      const countEl = document.getElementById('terms-count');
+      const categoryBtns = document.querySelectorAll('.category-btn');
+
+      let currentCategory = 'all';
+
+      function renderTerms() {
+        const query = searchInput.value.trim().toLowerCase();
+        if (query.length > 0) {
+          clearBtn.style.display = 'block';
+        } else {
+          clearBtn.style.display = 'none';
+        }
+
+        const filtered = ECONOMIC_TERMS.filter(item => {
+          const matchCat = (currentCategory === 'all') || (item.category === currentCategory);
+          const matchQuery = !query ||
+            item.term.toLowerCase().includes(query) ||
+            item.summary.toLowerCase().includes(query) ||
+            item.desc.toLowerCase().includes(query) ||
+            (item.related && item.related.some(r => r.toLowerCase().includes(query)));
+          return matchCat && matchQuery;
+        });
+
+        countEl.textContent = filtered.length;
+        container.innerHTML = '';
+
+        if (filtered.length === 0) {
+          emptyState.style.display = 'block';
+          return;
+        }
+
+        emptyState.style.display = 'none';
+
+        filtered.forEach(item => {
+          const card = document.createElement('div');
+          card.className = 'term-card';
+          card.id = item.id;
+
+          const tagsHtml = item.related ? item.related.map(tag => `<span class="term-tag" data-search="${tag}">#${tag}</span>`).join('') : '';
+
+          card.innerHTML = `
+            <div class="term-card-header">
+              <span class="term-category-badge">${item.category}</span>
+            </div>
+            <h3 class="term-title">${item.term}</h3>
+            <p class="term-summary">${item.summary}</p>
+            <p class="term-desc">${item.desc}</p>
+            ${item.tip ? `
+              <div class="term-tip-box">
+                <i class="fa-solid fa-lightbulb"></i>
+                <div>
+                  <strong>실전 팁</strong>
+                  <p>${item.tip}</p>
+                </div>
+              </div>
+            ` : ''}
+            ${tagsHtml ? `<div class="term-tags-wrap">${tagsHtml}</div>` : ''}
+          `;
+
+          container.appendChild(card);
+        });
+
+        // 연관 태그 클릭 시 검색
+        container.querySelectorAll('.term-tag').forEach(tag => {
+          tag.addEventListener('click', () => {
+            searchInput.value = tag.dataset.search;
+            currentCategory = 'all';
+            categoryBtns.forEach(b => b.classList.toggle('active', b.dataset.cat === 'all'));
+            renderTerms();
+            window.scrollTo({ top: 150, behavior: 'smooth' });
+          });
+        });
+      }
+
+      categoryBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          categoryBtns.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          currentCategory = btn.dataset.cat;
+          renderTerms();
+        });
+      });
+
+      searchInput.addEventListener('input', renderTerms);
+      clearBtn.addEventListener('click', () => {
+        searchInput.value = '';
+        renderTerms();
+        searchInput.focus();
+      });
+
+      renderTerms();
+    });
+  </script>
+  <script src="js/track.js" data-service="money"></script>
+</body>
+</html>
