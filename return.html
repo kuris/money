@@ -23,6 +23,7 @@
   <script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
   <script defer src="/_vercel/insights/script.js?v=20260909e"></script>
   <link rel="stylesheet" href="css/cg-auth.css?v=20260909e">
+  <link rel="stylesheet" href="css/cg-family.css?v=20260909e">
 </head>
 <body>
 
@@ -44,92 +45,7 @@
       </nav>
 
       <div class="nav-actions">
-        <div class="family-dropdown">
-          <button id="family-toggle-btn" class="family-btn" aria-haspopup="true" aria-expanded="false">
-            <span>패밀리 서비스</span>
-            <i class="fa-solid fa-chevron-down"></i>
-          </button>
-          <div id="family-dropdown-menu" class="family-menu">
-            <div class="family-menu-header">놀자 & 도구 시리즈</div>
-            <a href="https://hanja.chatgpts.kr" target="_blank" rel="noopener" class="family-item">
-              <span class="fi-icon">📖</span>
-              <div>
-                <strong>한자야 놀자</strong>
-                <p>급수 한자 학습과 고사성어</p>
-              </div>
-            </a>
-            <a href="https://voca.chatgpts.kr" target="_blank" rel="noopener" class="family-item">
-              <span class="fi-icon">⚡</span>
-              <div>
-                <strong>단어야 놀자</strong>
-                <p>영단어 학습과 퀴즈</p>
-              </div>
-            </a>
-            <a href="https://history.chatgpts.kr" target="_blank" rel="noopener" class="family-item">
-              <span class="fi-icon">📜</span>
-              <div>
-                <strong>역사야 놀자</strong>
-                <p>한국사·세계사 퀴즈와 연표</p>
-              </div>
-            </a>
-            <a href="https://fortune.chatgpts.kr" target="_blank" rel="noopener" class="family-item">
-              <span class="fi-icon">🔮</span>
-              <div>
-                <strong>운세야 놀자</strong>
-                <p>오늘의 운세와 타로카드</p>
-              </div>
-            </a>
-            <a href="https://mind.chatgpts.kr" target="_blank" rel="noopener" class="family-item">
-              <span class="fi-icon">🧠</span>
-              <div>
-                <strong>마인드테스트</strong>
-                <p>성격 유형 분석과 심리 검사</p>
-              </div>
-            </a>
-            <a href="https://work.chatgpts.kr" target="_blank" rel="noopener" class="family-item">
-              <span class="fi-icon">💼</span>
-              <div>
-                <strong>워크야 놀자</strong>
-                <p>연봉 실수령액, 퇴직금, 연차 계산기</p>
-              </div>
-            </a>
-            <a href="https://money.chatgpts.kr" class="family-item active">
-              <span class="fi-icon">💰</span>
-              <div>
-                <strong>머니야 놀자 (현재)</strong>
-                <p>생활 금융 계산기 & 경제 용어</p>
-              </div>
-            </a>
-            <a href="https://tools.chatgpts.kr" target="_blank" rel="noopener" class="family-item">
-              <span class="fi-icon">🛠️</span>
-              <div>
-                <strong>문서야 놀자</strong>
-                <p>글자수 세기, PDF, 날짜 계산</p>
-              </div>
-            </a>
-            <a href="https://bible.chatgpts.kr" target="_blank" rel="noopener" class="family-item">
-              <span class="fi-icon">✝️</span>
-              <div>
-                <strong>성경아 놀자</strong>
-                <p>개역한글 · WEB 한영 병렬 성경</p>
-              </div>
-            </a>
-            <a href="https://maum.chatgpts.kr" target="_blank" rel="noopener" class="family-item">
-              <span class="fi-icon">🪷</span>
-              <div>
-                <strong>마음아 놀자</strong>
-                <p>짧은 명상과 불교의 지혜, 마음 기록장</p>
-              </div>
-            </a>
-            <a href="https://chatgpts.kr" target="_blank" rel="noopener" class="family-item">
-              <span class="fi-icon">🏠</span>
-              <div>
-                <strong>chatgpts.kr</strong>
-                <p>전체 서비스 포털</p>
-              </div>
-            </a>
-          </div>
-        </div>
+        <div data-cg-family data-current="money"></div>
       </div>
     </div>
   </header>
@@ -433,7 +349,4 @@
 <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script defer src="js/supabase-config.js?v=20260909e"></script>
 <script defer src="js/cg-auth.js?v=20260909e" data-service="money" data-mount=".nav-actions" data-mount-mode="prepend"></script>
-<script defer src="js/cg-tools-recent.js?v=20260909e"></script>
-<script defer src="js/money-calc-log.js?v=20260909e"></script>
-</body>
-</html>
+<script defer src="js/cg-family.js?v=20260909e"></script>

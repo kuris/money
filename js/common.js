@@ -164,30 +164,12 @@ function fallbackCopy(text) {
 }
 
 /**
- * 패밀리 사이트 드롭다운 초기화
+ * 패밀리 사이트 드롭다운 초기화 (cg-family.js 가 자체 처리 — 구 바인딩 제거됨)
  */
-function initFamilyDropdown() {
-  const btn = document.getElementById('family-toggle-btn');
-  const menu = document.getElementById('family-dropdown-menu');
-  if (!btn || !menu) return;
-
-  btn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    const isOpen = menu.classList.toggle('active');
-    btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-  });
-
-  document.addEventListener('click', (e) => {
-    if (!menu.contains(e.target) && !btn.contains(e.target)) {
-      menu.classList.remove('active');
-      btn.setAttribute('aria-expanded', 'false');
-    }
-  });
-}
+function initFamilyDropdown() { return; }
 
 // DOM Ready
 document.addEventListener('DOMContentLoaded', () => {
-  initFamilyDropdown();
 
   // 공유 버튼이 있다면 이벤트 바인딩
   const shareBtn = document.getElementById('btn-share-page');
